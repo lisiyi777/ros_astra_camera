@@ -23,21 +23,13 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-image-publisher \
     libusb-1.0-0-dev \
     libeigen3-dev \
+    python3 \
+    python3-pip \
+    libpcl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set up the ROS workspace
-# RUN mkdir -p /root/ros_astra_ws/src
-# WORKDIR /root/ros_astra_ws/src
-# RUN git clone https://github.com/orbbec/ros_astra_camera.git
-
-# Build the workspace
-# WORKDIR /root/ros_astra_ws
-# RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_make"
-
-# Source the workspace on container start
-# WORKDIR /root/ros_astra_ws
-# RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /root/.bashrc && \
-#     echo "source /root/ros_astra_ws/devel/setup.bash" >> /root/.bashrc
+RUN pip3 install --upgrade pip setuptools wheel
+RUN pip3 install numpy python-pcl
 
 RUN mkdir -p /project
 WORKDIR /project
