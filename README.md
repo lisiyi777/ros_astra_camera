@@ -27,6 +27,7 @@ sudo udevadm control --reload && sudo  udevadm trigger
 Launch the container
 
 ```bash
+xhost +local:docker
 docker run -it --rm  --env="DISPLAY"  --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"  --device=/dev/bus/usb --name ros_astra_camera_container -v ~/ros_ws:/project ros_astra_camera_env /bin/bash
 ```
 
@@ -36,7 +37,7 @@ Start the camera
 
 ```bash
 source ./devel/setup.bash 
-roslaunch astra_camera astra.launch
+roslaunch astra_camera astra_pro.launch
 ```
 
 - In terminal 2
