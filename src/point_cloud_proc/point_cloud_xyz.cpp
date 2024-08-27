@@ -90,11 +90,12 @@ void PointCloudXyzNode::depthCb(const sensor_msgs::ImageConstPtr &depth_msg,
     return;
   }
   if (save_cloud_) {
-    save_cloud_ = false;
+    // save_cloud_ = false;
     auto now = std::time(nullptr);
     std::stringstream ss;
     ss << std::put_time(std::localtime(&now), "%Y%m%d_%H%M%S");
-    auto current_path = boost::filesystem::current_path().string();
+    // auto current_path = boost::filesystem::current_path().string();
+    std::string current_path = "/project";
     std::string filename = current_path + "/point_cloud/points_xyz_" + ss.str() + ".ply";
     if (!boost::filesystem::exists(current_path + "/point_cloud")) {
       boost::filesystem::create_directory(current_path + "/point_cloud");
