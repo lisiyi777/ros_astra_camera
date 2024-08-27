@@ -36,7 +36,7 @@ Start the camera
 
 ```bash
 source ./devel/setup.bash 
-roslaunch astra_camera astra.launch
+roslaunch astra_camera astra_pro.launch
 ```
 
 - In terminal 2
