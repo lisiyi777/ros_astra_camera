@@ -3,63 +3,31 @@
 The ros_astra_camera package is an OpenNI2 ROS wrapper created for Orbbec 3D cameras.
 This package allows the usage of Orbbec 3D cameras with ROS Kinetic, Melodic, and Noetic distributions
 
-## Install dependencies
+## Set up the environment
 
-### ROS
+- Build the docker container and the workspace.
 
-- Please refer directly to ROS [wiki](http://wiki.ros.org/ROS/Installation).
+```bash
+mkdir -p ~/ros_ws/src && cd ~/ros_ws/src
+git clone https://github.com/lisiyi777/ros_astra_camera.git
+cd ./ros_astra_camera/docker
+docker build -t ros_astra_camera_env .
+```
 
-### other dependencies
+- (In host machine) Install udev rules.
 
-- Install dependencies (be careful with your ROS distribution)
-
-  ```bash
-  # Assuming you have sourced the ros environment, same below
-  sudo apt install libgflags-dev  ros-$ROS_DISTRO-image-geometry ros-$ROS_DISTRO-camera-info-manager\
-  ros-$ROS_DISTRO-image-transport ros-$ROS_DISTRO-image-publisher  libusb-1.0-0-dev libeigen3-dev
-  ```
-
-- Install libuvc.
-
-  ```bash
-  git clone https://github.com/libuvc/libuvc.git
-  cd libuvc
-  mkdir build && cd build
-  cmake .. && make -j4
-  sudo make install
-  sudo ldconfig
-  ```
+```bash
+cd  ~/ros_ws/src/ros_astra_camera/
+./scripts/create_udev_rules
+sudo udevadm control --reload && sudo  udevadm trigger
+```
 
 ## Getting start
 
-- Create a ros workspace( if you don't have one).
+Launch the container
 
 ```bash
-mkdir -p ~/ros_ws/src
-```
-
-- Clone code from github.
-
-```bash
- cd ~/ros_ws/src
- git clone https://github.com/orbbec/ros_astra_camera.git
-```
-
-- Build
-
-```bash
-cd ~/ros_ws
-catkin_make
-```
-
-- Install udev rules.
-
-```bash
-cd ~/ros_ws
-source ./devel/setup.bash
-roscd astra_camera
-./scripts/create_udev_rules
-sudo udevadm control --reload && sudo  udevadm trigger
+docker run -it --rm  --env="DISPLAY"  --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"  --device=/dev/bus/usb --name ros_astra_camera_container -v ~/ros_ws:/project ros_astra_camera_env /bin/bash
 ```
 
 Start the camera
@@ -80,13 +48,14 @@ rviz
 
 Select the topic you want to display
 
-- Check topics / services/ parameters (open a new terminal)
+- Add-> By topic -> /camera/depth/points
 
+Record the pointclouds
 ```bash
-rostopic list
-rosservice list
-rosparam list
+record /camera/depth/points
 ```
+
+## More options
 
 - Check camera extrinsic parameter(from depth to color)
 
@@ -383,3 +352,4 @@ AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or im
 language governing permissions and limitations under the License.
 
 *Other names and brands may be claimed as the property of others*
+
